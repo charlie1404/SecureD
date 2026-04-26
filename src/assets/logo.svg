@@ -1,0 +1,67 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  version="1.1"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="3200"
+  height="4600"
+  viewBox="0 0 160 230"
+>
+  <path
+    d="M118 84.18206931238267 v-42 c0 -50.909425737116194 -76 -50.909425737116194 -76 0 v42"
+    fill="none"
+    stroke-linejoin="round"
+    stroke-linecap="round"
+    stroke-width="8"
+    stroke="#ffffff"
+  ></path>
+  <path
+    d="M4 150V150A76 76 0 0 1 156 150V150 "
+    fill="none"
+    stroke-dashoffset="0"
+    stroke-dasharray="16.713272917097697 19.10088333382594 202.94688542190062 243.53626250628076"
+    stroke-linejoin="round"
+    stroke-linecap="round"
+    stroke-width="8"
+    stroke="#ffffff"
+  ></path>
+  <path
+    d="M20.88888888888889 197.7689914401579V150A59.111111111111114 59.111111111111114 0 0 1 139.11111111111111 150V197.7689914401579 "
+    fill="none"
+    stroke-dashoffset="0"
+    stroke-dasharray="151.8701482579567 16.874460917550746 8.437230458775373 19.68687107047587 84.37230458775373 286.8658355983627"
+    stroke-linejoin="round"
+    stroke-linecap="round"
+    stroke-width="8"
+    stroke="#eda3aa"
+  ></path>
+  <path
+    d="M37.77777777777778 213.19243586551545V150A42.22222222222222 42.22222222222222 0 0 1 122.22222222222223 150V213.19243586551545 "
+    fill="none"
+    stroke-dashoffset="0"
+    stroke-dasharray="33.67388633473799 18.132092641781995 7.770896846477998 23.312690539433994 176.14032852016797 264.2104927802519"
+    stroke-linejoin="round"
+    stroke-linecap="round"
+    stroke-width="8"
+    stroke="#ffffff"
+  ></path>
+  <path
+    d="M54.66666666666667 221.6534871602368V150A25.33333333333333 25.33333333333333 0 0 1 105.33333333333333 150V221.6534871602368 "
+    fill="none"
+    stroke-dashoffset="0"
+    stroke-dasharray="189.45988997970278 17.8315190569132 15.602579174799052 227.35186797564333"
+    stroke-linejoin="round"
+    stroke-linecap="round"
+    stroke-width="8"
+    stroke="#eda3aa"
+  ></path>
+  <path
+    d="M71.55555555555556 225.5294072399929V150A8.444444444444443 8.444444444444443 0 0 1 88.44444444444444 150V225.5294072399929 "
+    fill="none"
+    stroke-dashoffset="0"
+    stroke-dasharray="35.51756382205993 17.758781911029963 124.31147337720974 181.1395754925056"
+    stroke-linejoin="round"
+    stroke-linecap="round"
+    stroke-width="8"
+    stroke="#ffffff"
+  ></path>
+</svg>
