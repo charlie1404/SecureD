@@ -2,7 +2,7 @@ export type RootStackParamList = {
   unlock: undefined;
   onboarding: undefined;
   home: undefined;
-  add: { name?: string; issuer?: string; seed?: string } | undefined;
+  add: { name?: string; issuer?: string; seed?: string, error?: string } | undefined;
   qr: undefined;
   notes: undefined;
   settings: undefined;

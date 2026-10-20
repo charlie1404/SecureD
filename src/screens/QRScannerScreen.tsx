@@ -20,27 +20,29 @@ export const QRScannerScreen = ({ theme: propTheme }: { theme?: ColorTheme }) =>
   }, [hasPermission, requestPermission]);
 
   const handleQRScanned = (uri: string) => {
-    const withoutPrefix = uri.replace('otpauth://totp/', '');
-    const [labelPart, queryPart] = withoutPrefix.split('?');
+    try {
+      const url = new URL(uri);
+      const [type, label] = url.pathname.split('/').filter(Boolean);
+      if (type !== 'totp') {
+        throw new Error('Otp type not supported. Enter details Manually.');
+      }
+      const decodedLabel = decodeURIComponent(label);
 
-    const decodedLabel = decodeURIComponent(labelPart);
-    let issuer = '';
-    let name = decodedLabel;
-    if (decodedLabel.includes(':')) {
-      const parts = decodedLabel.split(':');
-      issuer = parts[0].trim();
-      name = parts[1].trim();
+      const name = decodedLabel;
+      const seed = url.searchParams.get('secret') || '';
+
+      let issuer = url.searchParams.get('issuer') || '';
+      if(!issuer) {
+        const parts = decodedLabel.split(':');
+        if (parts.length > 1) {
+          issuer = parts[0].trim();
+        }
+      }
+
+      router.replace('add', { name, issuer, seed });
+    } catch (err) {
+      router.replace('add', {error: (err as Error).message || 'Invalid QR. Enter details Manually.'});
     }
-
-    const queryParams = (queryPart || '').split('&');
-    let seed = '';
-    for (const param of queryParams) {
-      if (param.startsWith('secret=')) seed = param.replace('secret=', '');
-      if (param.startsWith('issuer=') && !issuer)
-        issuer = decodeURIComponent(param.replace('issuer=', ''));
-    }
-
-    router.replace('add', { name, issuer, seed });
   };
 
   const codeScanner = useCodeScanner({
