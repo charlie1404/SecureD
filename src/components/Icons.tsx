@@ -8,8 +8,12 @@ export {
   Plus as PlusIcon,
   User as UserIcon,
   Key as KeyIcon,
-  FileText as FileTextIcon,
   Building as BuildingIcon,
-  Shield as ShieldInputIcon,
-  Check as CheckIcon
+  Check as CheckIcon,
+  Cloud as CloudIcon,
+  CloudOff as CloudOffIcon,
+  QrCode as QrCodeIcon,
+  Eye as EyeIcon,
+  EyeOff as EyeOffIcon,
+  Trash2 as TrashIcon,
 } from 'lucide-react-native';

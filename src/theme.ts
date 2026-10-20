@@ -1,3 +1,5 @@
+import { useColorScheme } from 'react-native';
+
 export interface ColorTheme {
   background: string;
   card: string;
@@ -58,4 +60,9 @@ export const Theme: { dark: ColorTheme; light: ColorTheme } = {
     danger: '#DC2626',
     white: '#FFFFFF',
   },
+};
+
+export const useAppTheme = (): ColorTheme => {
+  const isDarkMode = useColorScheme() === 'dark';
+  return isDarkMode ? Theme.dark : Theme.light;
 };

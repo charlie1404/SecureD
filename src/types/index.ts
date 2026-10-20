@@ -4,10 +4,11 @@ export interface Account {
   issuer?: string;
   seed: string;
   secureNotes?: string[];
+  createdAt?: number;
+  lastSyncedAt?: number;
+  excludeFromSync?: boolean;
 }
 
 export interface AccountWithTOTP extends Account {
   totp: string;
 }
-
-export type Screen = 'onboarding' | 'home' | 'add' | 'settings' | 'notes' | 'qr';

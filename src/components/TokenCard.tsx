@@ -3,11 +3,11 @@ import { View, Text, StyleSheet, Animated, Easing, Pressable, Vibration } from '
 import Svg, { Circle } from 'react-native-svg';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { AccountWithTOTP } from '../types';
-import { CheckIcon } from './Icons';
+import { CheckIcon, CloudIcon, CloudOffIcon } from './Icons';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-export const TokenCard = ({ item, theme, onPress }: { item: AccountWithTOTP, theme: any, onPress?: () => void }) => {
+export const TokenCard = ({ item, theme, onPress }: { item: AccountWithTOTP; theme: any; onPress?: () => void }) => {
   const animatedProgress = useRef(new Animated.Value(1)).current;
   const [copied, setCopied] = useState(false);
   const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -48,7 +48,7 @@ export const TokenCard = ({ item, theme, onPress }: { item: AccountWithTOTP, the
   // Smooth color transition: Blue (30s-6.0s) -> Transition (6.0s-5.8s) -> Red (5.8s-0s)
   const animatedColor = animatedProgress.interpolate({
     inputRange: [0, 5.8 / 30, 6.0 / 30, 1],
-    outputRange: [theme.danger, theme.danger, theme.accent, theme.accent]
+    outputRange: [theme.danger, theme.danger, theme.accent, theme.accent],
   });
 
   const radius = 22;
@@ -58,8 +58,10 @@ export const TokenCard = ({ item, theme, onPress }: { item: AccountWithTOTP, the
   // Animate the pie slice shrinking
   const strokeDashoffset = animatedProgress.interpolate({
     inputRange: [0, 1],
-    outputRange: [circumference, 0]
+    outputRange: [circumference, 0],
   });
+
+  const isSynced = !!item.lastSyncedAt && (!item.createdAt || item.lastSyncedAt >= item.createdAt);
 
   const handleLongPress = () => {
     Clipboard.setString(item.totp);
@@ -81,7 +83,7 @@ export const TokenCard = ({ item, theme, onPress }: { item: AccountWithTOTP, the
           borderColor: theme.cardBorder,
           borderWidth: 1,
         },
-        pressed && { opacity: 0.85, transform: [{ scale: 0.98 }] }
+        pressed && { opacity: 0.85, transform: [{ scale: 0.98 }] },
       ]}
     >
       <View style={styles.issuerRow}>
@@ -91,14 +93,18 @@ export const TokenCard = ({ item, theme, onPress }: { item: AccountWithTOTP, the
             <Svg width="48" height="48" viewBox="0 0 48 48">
               {/* Subtle background track */}
               <Circle
-                cx="24" cy="24" r={radius}
+                cx="24"
+                cy="24"
+                r={radius}
                 stroke={theme.subText + '20'}
                 strokeWidth={strokeWidth}
                 fill="none"
               />
               {/* Animated foreground ring */}
               <AnimatedCircle
-                cx="24" cy="24" r={radius}
+                cx="24"
+                cy="24"
+                r={radius}
                 stroke={animatedColor}
                 strokeWidth={strokeWidth}
                 strokeDasharray={circumference}
@@ -129,9 +135,32 @@ export const TokenCard = ({ item, theme, onPress }: { item: AccountWithTOTP, the
               <View style={[styles.metaDot, { backgroundColor: theme.accentSecondary }]} />
             ) : null}
           </View>
-          <Text style={[styles.accountName, { color: theme.subText }]} numberOfLines={1}>
-            {item.name}
-          </Text>
+
+          <View style={styles.accountSubRow}>
+            <Text style={[styles.accountName, { color: theme.subText }]} numberOfLines={1}>
+              {item.name}
+            </Text>
+            <View
+              style={[
+                styles.syncBadge,
+                { backgroundColor: isSynced ? theme.success + '18' : theme.warning + '18' },
+              ]}
+            >
+              {isSynced ? (
+                <CloudIcon color={theme.success} size={11} />
+              ) : (
+                <CloudOffIcon color={theme.warning} size={11} />
+              )}
+              <Text
+                style={[
+                  styles.syncText,
+                  { color: isSynced ? theme.success : theme.warning },
+                ]}
+              >
+                {isSynced ? 'Synced' : 'Local'}
+              </Text>
+            </View>
+          </View>
         </View>
       </View>
 
@@ -145,14 +174,79 @@ export const TokenCard = ({ item, theme, onPress }: { item: AccountWithTOTP, the
 };
 
 const styles = StyleSheet.create({
-  card: { paddingHorizontal: 16, paddingVertical: 18, borderRadius: 16, marginBottom: 12, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  issuerRow: { flexDirection: 'row', alignItems: 'center', flex: 1, paddingRight: 12 },
-  avatarContainer: { width: 48, height: 48, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
-  issuerIcon: { width: 38, height: 38, borderRadius: 19, justifyContent: 'center', alignItems: 'center' },
-  issuerIconText: { fontSize: 18, fontWeight: '700' },
-  issuerName: { fontSize: 16, fontWeight: '700', marginBottom: 2 },
-  accountName: { fontSize: 13, fontWeight: '500' },
-  metaDot: { width: 6, height: 6, borderRadius: 3, marginLeft: 8 },
-  totpCompactRow: { flexDirection: 'row', alignItems: 'center' },
-  totpCodeCompact: { fontSize: 28, fontWeight: '500', letterSpacing: 2 },
+  card: {
+    paddingHorizontal: 16,
+    paddingVertical: 18,
+    borderRadius: 16,
+    marginBottom: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  issuerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    paddingRight: 12,
+  },
+  avatarContainer: {
+    width: 48,
+    height: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  issuerIcon: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  issuerIconText: {
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  issuerName: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 2,
+  },
+  accountSubRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  accountName: {
+    fontSize: 13,
+    fontWeight: '500',
+    maxWidth: 130,
+  },
+  syncBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
+    gap: 4,
+  },
+  syncText: {
+    fontSize: 10,
+    fontWeight: '700',
+  },
+  metaDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginLeft: 8,
+  },
+  totpCompactRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  totpCodeCompact: {
+    fontSize: 28,
+    fontWeight: '500',
+    letterSpacing: 2,
+  },
 });
